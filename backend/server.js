@@ -5,6 +5,39 @@ const PORT = 5000;
 
 app.use(express.json());
 
+// Middleware
+const logger = (req, res, next) => {
+    console.log(req.method, req.url);
+
+    // Go to response
+    next();
+}
+
+// Custome middleware(validation)
+
+const validateUser = (req, res, next) => {
+    const { name, email, age } = req.body;
+
+    if (!name || !email || age === undefined) {
+        return res.status(404).json({
+            message: "Name, email and age are required",
+        })
+    }
+
+    if (typeof age !== "number") {
+        return res.status(400).json({
+            message: "Age must be a number",
+        });
+    }
+
+    next();
+}
+
+
+// Register Logger
+app.use(logger);
+
+
 // temp array
 const users = [
     {
@@ -25,8 +58,6 @@ app.get("/users", (req, res) => {
     const { search } = req.query;
 
 
-    console.log("Search:", search.length);
-    console.log("Users:", users);
 
     if (!search) {
         return res.json(users);
@@ -39,7 +70,7 @@ app.get("/users", (req, res) => {
     res.json(filterdUsers);
 })
 
-app.post('/users', (req, res) => {
+app.post('/users', validateUser, (req, res) => {
     const { name, email, age } = req.body;
 
     const newUser = {
@@ -49,11 +80,6 @@ app.post('/users', (req, res) => {
         age,
     };
 
-    if (!name || !email || age === undefined) {
-        return res.status(400).json({
-            message: "Name, email and age are required",
-        });
-    }
 
     users.push(newUser);
     res.status(201).json(newUser);

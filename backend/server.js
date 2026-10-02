@@ -21,9 +21,72 @@ const users = [
     },
 ];
 
-app.get("/users", (req, res) =>{
+app.get("/users", (req, res) => {
+    const { search } = req.query;
+    console.log(search);
     res.json(users);
 })
+
+app.post('/users', (req, res) => {
+    const { name, email, age } = req.body;
+
+    const newUser = {
+        id: users.length + 1,
+        name,
+        email,
+        age,
+    };
+
+    if (!name || !email || age === undefined) {
+        return res.status(400).json({
+            message: "Name, email and age are required",
+        });
+    }
+
+    users.push(newUser);
+    res.status(201).json(newUser);
+
+})
+
+app.get("/users/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const user = users.find(user => user.id === id);
+
+    if (!user) {
+        return res.status(404).json({
+            messgage: "user not found"
+        });
+
+    }
+
+    res.json(user);
+})
+
+
+app.delete("/users/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const userIndex = users.findIndex(user => user.id === id);
+
+    if (userIndex === -1) {
+        return res.status(404).json({
+            messgage: "user not found"
+        });
+
+    }
+
+    const deletedUser = users.splice(userIndex, 1);
+
+    res.json({
+        message: "User deleted successfully",
+        user: deletedUser[0],
+    })
+
+});
+
+
+
+
+
 
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`))

@@ -23,8 +23,20 @@ const users = [
 
 app.get("/users", (req, res) => {
     const { search } = req.query;
-    console.log(search);
-    res.json(users);
+
+
+    console.log("Search:", search.length);
+    console.log("Users:", users);
+
+    if (!search) {
+        return res.json(users);
+    }
+
+    const filterdUsers = users.filter((user) => {
+        return user.name.toLowerCase().includes(search.toLowerCase())
+    })
+
+    res.json(filterdUsers);
 })
 
 app.post('/users', (req, res) => {

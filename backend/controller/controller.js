@@ -1,40 +1,24 @@
 import users from "../data/data.js";
+import {
+    getUserId,
+    getAllUsers,
+    createUser,
+    updateUser, 
+    removeUser
+} from "../services/services.js";
 
 // getUsers
 export const getUsers = (req, res) => {
     const { search } = req.query;
+    const users = getAllUsers(search);
 
-    if (!search) {
-        return res.json(users);
-    }
-
-    const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(search.toLowerCase())
-    );
-
-    res.json(filteredUsers);
+    res.json(users);
 };
 
-// Postusers
-export const postUser = ((req, res) => {
-    const { name, email, age } = req.body;
-
-    const newUser = {
-        id: users.length + 1,
-        name,
-        email,
-        age,
-    };
-
-
-    users.push(newUser);
-    res.status(201).json(newUser);
-
-})
-
+// Get users by ID
 export const getUser = ((req, res) => {
     const id = Number(req.params.id);
-    const user = users.find(user => user.id === id);
+    const user = getUserId(id);
 
     if (!user) {
         return res.status(404).json({
@@ -42,14 +26,25 @@ export const getUser = ((req, res) => {
         });
 
     }
-
     res.json(user);
 })
 
+
+// Post users
+export const postUser = ((req, res) => {
+    const { name, email, age } = req.body;
+    const newUser = createUser(name, email, age);
+
+    res.status(201).json(newUser);
+
+})
+
+
+// Patch user (updated User)
 export const patchUser = (req, res) => {
     const id = Number(req.params.id);
-
-    const user = users.find((user) => user.id === id);
+    const { name, email, age } = req.body;
+    const user = updateUser(id, name, email, age)
 
     if (!user) {
         return res.status(404).json({
@@ -57,32 +52,27 @@ export const patchUser = (req, res) => {
         });
     }
 
-    const { name, email, age } = req.body;
-
-    if (name !== undefined) user.name = name;
-    if (email !== undefined) user.email = email;
-    if (age !== undefined) user.age = age;
 
     res.json(user);
 };
 
 
+// Delete user
 export const deleteUser = ((req, res) => {
     const id = Number(req.params.id);
-    const userIndex = users.findIndex(user => user.id === id);
+    const deletedUser = removeUser(id)
 
-    if (userIndex === -1) {
+    if (!deleteUser) {
         return res.status(404).json({
             messgage: "user not found"
         });
 
     }
 
-    const deletedUser = users.splice(userIndex, 1);
 
     res.json({
         message: "User deleted successfully",
-        user: deletedUser[0],
+        user: deletedUser,
     })
 
 });

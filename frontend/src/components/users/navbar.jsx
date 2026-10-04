@@ -1,5 +1,6 @@
 import { Button, Flex, Heading } from "@chakra-ui/react"
-
+import SearchBox
+    from "./searchBox"
 export default function Navbar() {
     return (
         <Flex
@@ -13,6 +14,8 @@ export default function Navbar() {
             shadow={"sm"}
         >
             <Heading size="lg" color="blue.600">User Management</Heading>
+
+            <SearchBox />
 
             <Button colorPalette={'blue'}>
                 Add Users

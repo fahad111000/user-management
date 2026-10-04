@@ -1,10 +1,9 @@
 import { Button } from '@chakra-ui/react'
-
+import Navbar from './components/users/navbar'
 export default function App() {
   return (
     <>
-      <h1>hello world!</h1>
-      <Button>Click me</Button>
+      <Navbar />
     </>
   )
 }

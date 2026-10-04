@@ -1,9 +1,10 @@
-import { Button } from '@chakra-ui/react'
 import Navbar from './components/users/navbar'
+import SearchBox from './components/users/searchBox'
 export default function App() {
   return (
     <>
       <Navbar />
+      <SearchBox />
     </>
   )
 }

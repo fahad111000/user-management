@@ -1,8 +1,12 @@
 import { Button, Dialog, Field, Input, Portal, Stack } from "@chakra-ui/react";
 
-export default function UserModal() {
+export default function UserModal({ open, onClose }) {
     return (
-        <Dialog.Root>
+        <Dialog.Root open={open} onOpenChange={(e) => {
+            if (!e.open) {
+                onClose();
+            }
+        }}>
             <Portal>
                 <Dialog.Backdrop />
                 <Dialog.Positioner>
@@ -36,7 +40,7 @@ export default function UserModal() {
                         {/* Modal footer */}
                         <Dialog.Footer>
                             <Dialog.ActionTrigger>
-                                <Button variant={'outline'}>Cancel</Button>
+                                <Button variant={'outline'} onClick={onClose}>Cancel</Button>
                             </Dialog.ActionTrigger>
 
                             <Button>Save</Button>

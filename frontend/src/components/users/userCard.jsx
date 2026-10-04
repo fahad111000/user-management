@@ -24,7 +24,7 @@ export default function UserCard() {
                     </Card.Title>
                     <Card.Description>
                         <Text>
-                            <Text as={Span} fontWeight={'bold'}>Email : </Text>
+                            {/* <Text as={Span} fontWeight={'bold'}>Email : </Text> */}
                             fahad123@gmail.com
                         </Text>
                         <Text>

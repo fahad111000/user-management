@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Span, Stack, Text } from "@chakra-ui/react";
 
-export default function UserCard() {
+export default function UserCard({ users }) {
     return (
 
         <Flex
@@ -16,35 +16,31 @@ export default function UserCard() {
         >
 
             {/* Card */}
-            <Card.Root width={'320px'} mx={'10px'} shadow={'sm'}>
-                <Card.Body>
+            {users.map((user) =>
+                <Card.Root width={'320px'} mx={'10px'} shadow={'sm'}>
+                    <Card.Body>
 
-                    <Card.Title>
-                        Fahad
-                    </Card.Title>
-                    <Card.Description>
-                        <Text>
-                            {/* <Text as={Span} fontWeight={'bold'}>Email : </Text> */}
-                            fahad123@gmail.com
-                        </Text>
-                        <Text>
-                            <Text as={Span} fontWeight={'bold'}>Age : </Text>
-                            30
-                        </Text>
-                    </Card.Description>
-                </Card.Body>
+                        <Card.Title>
+                            {user.name}
+                        </Card.Title>
+                        <Card.Description>
+                            <Text>
+                                {/* <Text as={Span} fontWeight={'bold'}>Email : </Text> */}
+                                {user.email}
+                            </Text>
+                            <Text>
+                                <Text as={Span} fontWeight={'bold'}>Age : </Text>
+                                {user.age}
+                            </Text>
+                        </Card.Description>
+                    </Card.Body>
 
-                <Card.Footer justifyContent={'flex-end'}>
-                    <Button     >Edit</Button>
-                    <Button colorPalette="red" variant="outline">Delete</Button>
-                </Card.Footer>
-            </Card.Root>
-
-
-
+                    <Card.Footer justifyContent={'flex-end'}>
+                        <Button>Edit</Button>
+                        <Button colorPalette="red" variant="outline">Delete</Button>
+                    </Card.Footer>
+                </Card.Root>
+            )}
         </Flex>
-
-
-
     )
 }

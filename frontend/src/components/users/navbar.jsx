@@ -1,7 +1,7 @@
 import { Button, Flex, Heading } from "@chakra-ui/react"
 import SearchBox
     from "./searchBox"
-export default function Navbar({ onAddUser }) {
+export default function Navbar({ onAddUser, onSearch }) {
     return (
         <Flex
             justifyContent={'space-between'}
@@ -15,7 +15,7 @@ export default function Navbar({ onAddUser }) {
         >
             <Heading size="lg" color="blue.600">User Management</Heading>
 
-            <SearchBox />
+            <SearchBox onSearch={onSearch} />
 
             <Button colorPalette={'blue'} onClick={onAddUser}
             >

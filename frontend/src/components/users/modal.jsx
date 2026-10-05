@@ -1,6 +1,76 @@
 import { Button, Dialog, Field, Input, Portal, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
-export default function UserModal({ open, onClose }) {
+export default function UserModal({ open, onClose, setUsers, selectedUser, }) {
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [age, setAge] = useState("");
+
+    useEffect(() => {
+        if (selectedUser) {
+            setName(selectedUser.name);
+            setEmail(selectedUser.email);
+            setAge(selectedUser.age);
+        }
+
+        else {
+            setName("");
+            setEmail("");
+            setAge("");
+        }
+    }, [selectedUser])
+
+    const handelSave = async () => {
+        const newUser = {
+            name,
+            email,
+            age: Number(age),
+        }
+
+        if (selectedUser) {
+            const response = await fetch(
+                `http://localhost:5000/users/${selectedUser.id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(newUser),
+                }
+            );
+
+            const updatedUser = await response.json();
+
+            setUsers((prev) =>
+                prev.map((user) =>
+                    user.id === updatedUser.id ? updatedUser : user
+                )
+            );
+            onClose();
+        }
+        else {
+
+
+            const response = await fetch("http://localhost:5000/users", {
+                method: "POST",
+                headers: {
+                    "content-Type": "application/json"
+                },
+                body: JSON.stringify(newUser)
+            })
+
+            const data = await response.json();
+            setUsers((prevUsers) => [...prevUsers, data])
+
+
+            onClose();
+            setName("");
+            setEmail("");
+            setAge("");
+        }
+    }
+
     return (
         <Dialog.Root open={open} onOpenChange={(e) => {
             if (!e.open) {
@@ -21,17 +91,25 @@ export default function UserModal({ open, onClose }) {
 
                                 <Field.Root>
                                     <Field.Label>Name</Field.Label>
-                                    <Input placeholder="First Name" />
+                                    <Input
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="Enter Name" />
                                 </Field.Root>
 
                                 <Field.Root>
                                     <Field.Label>Email</Field.Label>
-                                    <Input type="email" placeholder="Email" />
+                                    <Input
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        type="email" placeholder="Email" />
                                 </Field.Root>
 
                                 <Field.Root>
                                     <Field.Label>Age</Field.Label>
-                                    <Input />
+                                    <Input
+                                        value={age}
+                                        onChange={(e) => setAge(e.target.value)} />
                                 </Field.Root>
                             </Stack>
 
@@ -43,7 +121,7 @@ export default function UserModal({ open, onClose }) {
                                 <Button variant={'outline'} onClick={onClose}>Cancel</Button>
                             </Dialog.ActionTrigger>
 
-                            <Button>Save</Button>
+                            <Button onClick={handelSave}>Save</Button>
                         </Dialog.Footer>
 
                     </Dialog.Content>

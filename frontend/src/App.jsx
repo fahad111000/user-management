@@ -7,7 +7,9 @@ export default function App() {
 
   // model open or closed!
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // Users Data (array)
   const [users, setUsers] = useState([]);
+
   const [selectedUser, setSelectedUser] = useState(null);
 
 
@@ -23,8 +25,8 @@ export default function App() {
 
   }, [])
 
+  // Delete 
   const onDelete = async (id) => {
-    console.log(id)
     await fetch(`http://localhost:5000/users/${id}`, {
       method: "DELETE",
     });
@@ -35,6 +37,7 @@ export default function App() {
   }
 
 
+  // Edit
   const onEdit = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true)
@@ -42,7 +45,7 @@ export default function App() {
   }
 
 
-
+  // Search
   const onSearch = async (value) => {
     const response = await fetch(`http://localhost:5000/users?search=${value}`);
     const data = await response.json();

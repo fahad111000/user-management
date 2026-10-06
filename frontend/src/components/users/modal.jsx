@@ -21,6 +21,7 @@ export default function UserModal({ open, onClose, setUsers, selectedUser, }) {
         }
     }, [selectedUser])
 
+    // POST / PATCH
     const handelSave = async () => {
         const newUser = {
             name,
@@ -28,6 +29,8 @@ export default function UserModal({ open, onClose, setUsers, selectedUser, }) {
             age: Number(age),
         }
 
+
+        // PATCH
         if (selectedUser) {
             const response = await fetch(
                 `http://localhost:5000/users/${selectedUser.id}`,
@@ -42,15 +45,16 @@ export default function UserModal({ open, onClose, setUsers, selectedUser, }) {
 
             const updatedUser = await response.json();
 
-            setUsers((prev) =>
-                prev.map((user) =>
-                    user.id === updatedUser.id ? updatedUser : user
-                )
-            );
+            setUsers((prev) => {
+                return prev.map((user) => {
+                    return user.id === updatedUser.id ? updatedUser : user
+                })
+            })
             onClose();
         }
-        else {
 
+        // POST
+        else {
 
             const response = await fetch("http://localhost:5000/users", {
                 method: "POST",
